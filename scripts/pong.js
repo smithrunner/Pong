@@ -11,6 +11,9 @@ var height = 600;
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
+var player = new Player();
+var computer = new Computer();
+var ball = new Ball(200, 300);
 
 // Loads our canvas
 window.onload = function() {
@@ -39,8 +42,10 @@ var step = function() {
 
 var update = function() {
   player.update();
+  computer.update(ball);
   ball.update(player.paddle, computer.paddle);
 };
+
 
 Ball.prototype.update = function(paddle1, paddle2) {
   this.x += this.x_speed;
@@ -93,6 +98,22 @@ Player.prototype.update = function() {
   }
 };
 
+Computer.prototype.update = function(ball) {
+  var x_pos = ball.x;
+  var diff = -((this.paddle.x + (this.paddle.width / 2)) - x_pos);
+  if (diff < 0 && diff < -4) {
+    diff = -5;
+  } else if(diff > 0 && diff > 4) {
+    diff = 5;
+  }
+  this.paddle.move(diff, 0);
+  if(this.paddle.x < 0) {
+    this.paddle.x = 0;
+  } else if (this.paddle.x + this.paddle.width > 400) {
+    this.paddle.x = 400 - this.paddle.width;
+  }
+};
+
 Paddle.prototype.move = function(x,y) {
   this.x += x;
   this.y += y;
@@ -106,6 +127,7 @@ Paddle.prototype.move = function(x,y) {
     this.x_speed = 0;
   }
 }
+
 
 // Adds players and a ball
 var render = function() {
@@ -165,7 +187,3 @@ Ball.prototype.render = function() {
   context.fillStyle = "#000000";
   context.fill();
 };
-
-var player = new Player();
-var computer = new Computer();
-var ball = new Ball(200, 300);
