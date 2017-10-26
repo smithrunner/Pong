@@ -11,9 +11,25 @@ var height = 600;
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
+
+// create some players and a ball
 var player = new Player();
 var computer = new Computer();
 var ball = new Ball(200, 300);
+
+// start the scores at 0
+var computerScore = 0;
+var humanScore = 0;
+
+// displayes the score
+function drawScore() {
+  context.font = "50px Monospace";
+  context.fillstyle = "#0095DD";
+  context.fillText(humanScore, 186, 450);
+  context.fillText(computerScore, 186 , 150);
+}
+
+
 
 // Loads our canvas
 window.onload = function() {
@@ -38,6 +54,7 @@ var step = function() {
   update();
   render();
   animate(step);
+  drawScore();
 };
 
 var update = function() {
@@ -63,11 +80,18 @@ Ball.prototype.update = function(paddle1, paddle2) {
     this.x_speed = -this.x_speed;
   }
 
-  if(this.y < 0 || this.y > 600) {
+  if(this.y < 0) {
     this.x_speed = 0;
     this.y_speed = 3;
     this.x = 200;
     this.y = 300;
+    humanScore++;
+  } else if(this.y > 600) {
+    this.x_speed = 0;
+    this.y_speed = 3;
+    this.x = 200;
+    this.y = 300;
+    computerScore++;
   }
 
   if(top_y > 300) {
@@ -131,7 +155,7 @@ Paddle.prototype.move = function(x,y) {
 
 // Adds players and a ball
 var render = function() {
-  context.fillStyle = "#FF00FF";
+  context.fillStyle = "#1D4F36";
   context.fillRect(0, 0, width, height);
   player.render();
   computer.render();
@@ -169,7 +193,7 @@ function Ball(x, y) {
 
 // Renders all the neccessary parts!
 Paddle.prototype.render = function() {
-  context.fillStyle = "#0000FF";
+  context.fillStyle = "#FFFFFF";
   context.fillRect(this.x, this.y, this.width, this.height);
 };
 
@@ -184,6 +208,6 @@ Computer.prototype.render = function() {
 Ball.prototype.render = function() {
   context.beginPath();
   context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-  context.fillStyle = "#000000";
+  context.fillStyle = "#8EB2A1";
   context.fill();
 };
