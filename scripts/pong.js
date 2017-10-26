@@ -18,6 +18,19 @@ window.onload = function() {
   animate(step);
 };
 
+//Create an object and listeners for when the human presses the arrow keys
+// to move the paddle
+var keysDown = {};
+
+window.addEventListener("keydown", function(event) {
+  keysDown[event.keyCode] = true;
+});
+
+window.addEventListener("keyup", function(event) {
+  delete keysDown[event.keyCode];
+});
+
+
 var step = function() {
   update();
   render();
@@ -25,6 +38,7 @@ var step = function() {
 };
 
 var update = function() {
+  player.update();
   ball.update(player.paddle, computer.paddle);
 };
 
@@ -65,6 +79,33 @@ Ball.prototype.update = function(paddle1, paddle2) {
     }
   }
 };
+
+Player.prototype.update = function() {
+  for(var key in keysDown) {
+    var value = Number(key);
+    if(value == 37) {
+      this.paddle.move(-4,0);
+    } else if (value == 39) {
+      this.paddle.move(4,0);
+    } else {
+      this.paddle.move(0,0);
+    }
+  }
+};
+
+Paddle.prototype.move = function(x,y) {
+  this.x += x;
+  this.y += y;
+  this.x_speed = x;
+  this.y_speed = y;
+  if(this.x < 0) {
+    this.x = 0;
+    this.x_speed = 0;
+  } else if (this.x + this.width > 400) {
+    this.x = 400 - this.width;
+    this.x_speed = 0;
+  }
+}
 
 // Adds players and a ball
 var render = function() {
