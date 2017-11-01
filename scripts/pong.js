@@ -7,9 +7,18 @@
 /////////////////////////////////////////////////////////////////////////////////////////
 ////// LET"S DEFINE THE BASIC COMPONENTS ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
+if (window.innerWidth > 400) {
+  var tableWidth = 400;
+} else {
+  var tableWidth = window.innerWidth - 20;
+};
 
-var tableWidth = window.innerWidth - 20;
-var tableHeight = window.innerHeight - 20;
+if (window.innerHeight > 600) {
+  var tableHeight = 600;
+} else {
+  var tableHeight = window.innerHeight - 20;
+};
+
 var tableCenterW = tableWidth / 2;
 var tableCenterH = tableHeight / 2;
 var ballRadius = tableWidth / 80;
